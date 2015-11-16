@@ -159,7 +159,7 @@ def main():
 
 def parser():
     ### DEFINE PARSER FOR COMMAND LINE ARGUMENTS
-    parser = argparse.ArgumentParser(description="Selection of AAS Chairs."
+    parser = argparse.ArgumentParser(description="Selection of conference chairs."
                                                  "Strings in command line "
                                                  "arguments need to match those "
                                                  "in the form *exactly*.")
