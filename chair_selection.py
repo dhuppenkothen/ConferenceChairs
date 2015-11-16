@@ -70,13 +70,13 @@ def select_chair(df, area1, date, start_time, end_time,
 
     """
 
-    area1_data = f["area_of_expertise_1"]
-    area2_data = f["area_of_expertise_2"]
-    area3_data = f["area_of_expertise_3"]
+    area1_data = df["area_of_expertise_1"]
+    area2_data = df["area_of_expertise_2"]
+    area3_data = df["area_of_expertise_3"]
 
-    session_date = f["session_date"]
-    session_start = f["session_start"]
-    session_end = f["session_end"]
+    session_date = df["session_date"]
+    session_start = df["session_start"]
+    session_end = df["session_end"]
 
 
     if np.size(area1) == 1:
@@ -84,7 +84,9 @@ def select_chair(df, area1, date, start_time, end_time,
     else:
         df_selected = df[(area1_data == area1[0])]
         for a in area1[1:]:
-            df_selected += df_selected[(area1_data == a)]
+            df_selected = pd.concat([df_selected, df[(area1_data == a)]])
+   
+    print(df_selected) 
 
     if area2 is not None:
         if np.size(area2) == 1:
@@ -93,8 +95,9 @@ def select_chair(df, area1, date, start_time, end_time,
         else:
             df_selected_new = df_selected[(area2_data == area2[0])]
             for a in area2[1:]:
-                df_selected_new += df_selected[(area2_data == a)]
+                df_selected_new = pd.concat([df_selected_new, df_selected[(area2_data == a)]])
     else:
+        print("area2 is None")
         df_selected_new = df_selected
 
     if area3 is not None:
@@ -104,10 +107,10 @@ def select_chair(df, area1, date, start_time, end_time,
         else:
             df_selected_all = df_selected_new[(area3_data == area3[0])]
             for a in area2[1:]:
-                df_selected_all += df_selected_new[(area3_data == a)]
+                df_selected_all = pd.concat([df_selected_all, df_selected_new[(area3_data == a)]])
     else:
+        print("area3 is None")
         df_selected_all = df_selected_new
-
 
 
     df_off_date = df_selected_all[(session_date != date)]
@@ -115,7 +118,9 @@ def select_chair(df, area1, date, start_time, end_time,
                             (session_start != start_time) &
                             (session_end != end_time)) ]
 
-    df_selected_all = df_off_date + df_on_date
+    df_selected_all = pd.concat([df_off_date, df_on_date])
+    #df_selected_all = df_off_date + df_on_date
+    print("mode: " + mode)
 
     if mode == "all":
         return df_selected_all
@@ -123,7 +128,8 @@ def select_chair(df, area1, date, start_time, end_time,
         return df_selected_all.loc[ \
                 np.random.choice(np.array(df_selected_all.index))]
 
-
+    else:
+        raise Exception("Mode not recognized!")
 
 def read_data(filename):
     df = pd.read_csv(filename)
@@ -162,7 +168,7 @@ def parser():
     parser.add_argument("-f", "--filename", action="store", dest="filename",
                         required=True, help="File name with session chairs.")
 
-    parser.add_argument("-a", "--area1", action="store", dest="area1",
+    parser.add_argument("-a", "--area1", action="store", dest="area1", nargs="+",
                         required=True,
                         help="Primary area of expertise.")
 
@@ -184,10 +190,10 @@ def parser():
                              'a chair from the available sample at random'
                              '("random").')
 
-    parser.add_argument("--area2", action="store", dest="area2", default="None",
+    parser.add_argument("--area2", action="store", dest="area2", default="None", nargs="*",
                         required=False, help="Secondary area of expertise.")
 
-    parser.add_argument("--area3", action="store", dest="area3", default="None",
+    parser.add_argument("--area3", action="store", dest="area3", default="None", nargs="*",
                         required=False, help="Tertiary area of expertise.")
 
 
