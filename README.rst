@@ -16,7 +16,7 @@ Copyright
 All content © 2015 the author. The code is distributed under the MIT license.
 
 Pull requests are welcome! If you are interested in the further development of
-Stingray, please `get in touch via the issues
+this package, please `get in touch via the issues
 <https://github.com/dhuppenkothen/ConferenceChairs/issues>`_!
 
 
