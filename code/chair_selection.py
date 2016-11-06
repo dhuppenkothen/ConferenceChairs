@@ -168,7 +168,7 @@ def parser():
     parser.add_argument("-f", "--filename", action="store", dest="filename",
                         required=True, help="File name with session chairs.")
 
-    parser.add_argument("-a", "--area1", action="store", dest="area1", nargs="+",
+    parser.add_argument("-a", "--area1", action="store", dest="area1", nargs="*",
                         required=True,
                         help="Primary area of expertise.")
 
