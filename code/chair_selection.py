@@ -80,7 +80,7 @@ def select_chair(df, area1, date, start_time, end_time,
 
 
     if np.size(area1) == 1:
-        df_selected = df[(area1_data == area1)]
+        df_selected = df[(area1_data == area1[0])]
     else:
         df_selected = df[(area1_data == area1[0])]
         for a in area1[1:]:
